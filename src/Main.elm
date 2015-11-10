@@ -136,4 +136,8 @@ augment model =
 view : Address Action -> Model -> Html
 view actionAddress model =
   let augModel = augment model
-  in div [] [ text (toString augModel.voteCount) ]
+      guiAddress = Signal.forwardTo actionAddress FromGui
+  in div [] [ button [ onClick guiAddress UpvoteEvent ] [ text "-" ]
+            , text (toString augModel.voteCount)
+            , button [ onClick guiAddress DownvoteEvent ] [text "+" ]
+            ]
