@@ -107,7 +107,6 @@ updateState action model =
       , Effects.none
       )
 
-    -- TODO
     FromGui UpvoteEvent ->
       ( model
       , effectVotes <| ElmFire.Op.push (Upvote 1)
