@@ -89,6 +89,10 @@ kickOff : Task x a -> Effects Action
 kickOff =
   Task.toMaybe >> Task.map (always (FromEffect)) >> Effects.task
 
+effectVotes : ElmFire.Op.Operation Vote -> Effects Action
+effectVotes operation =
+  ElmFire.Op.operate syncConfig operation |> kickOff
+
 updateState : Action -> Model -> (Model, Effects Action)
 updateState action model =
   case action of
@@ -106,17 +110,12 @@ updateState action model =
     -- TODO
     FromGui UpvoteEvent ->
       ( model
-      , Effects.none
+      , effectVotes <| ElmFire.Op.push (Upvote 1)
       )
 
     FromGui DownvoteEvent ->
       ( model
-      , Effects.none
-      )
-
-    _ ->
-      ( model
-      , Effects.none
+      , effectVotes <| ElmFire.Op.push (Downvote 1)
       )
 
 type alias AugModel = {
@@ -137,7 +136,7 @@ view : Address Action -> Model -> Html
 view actionAddress model =
   let augModel = augment model
       guiAddress = Signal.forwardTo actionAddress FromGui
-  in div [] [ button [ onClick guiAddress UpvoteEvent ] [ text "-" ]
+  in div [] [ button [ onClick guiAddress DownvoteEvent ] [ text "-" ]
             , text (toString augModel.voteCount)
-            , button [ onClick guiAddress DownvoteEvent ] [text "+" ]
+            , button [ onClick guiAddress UpvoteEvent ] [text "+" ]
             ]
