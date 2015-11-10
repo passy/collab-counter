@@ -119,6 +119,21 @@ updateState action model =
       , Effects.none
       )
 
+type alias AugModel = {
+  voteCount: Int
+}
+
+voteToNum : Vote -> Int
+voteToNum v = case v of
+  Upvote i -> i
+  Downvote i -> -1 * i
+
+augment : Model -> AugModel
+augment model =
+  let count = List.foldl (\a b -> b + (voteToNum a)) 0 (Dict.values model.votes)
+  in { voteCount = count }
+
 view : Address Action -> Model -> Html
 view actionAddress model =
-  div [] [ text "Hi." ]
+  let augModel = augment model
+  in div [] [ text (toString augModel.voteCount) ]
