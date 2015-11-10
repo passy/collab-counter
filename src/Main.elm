@@ -55,8 +55,8 @@ main = app.html
 -- Something here doesn't type-check. I hope I can figure this out after some
 -- sleep ...
 type Vote = Upvote Int | Downvote Int
-type Id = String
-type Votes = Dict Id Vote
+type alias Id = String
+type alias Votes = Dict Id Vote
 
 type alias Model =
   { votes: Votes
