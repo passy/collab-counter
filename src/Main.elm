@@ -99,7 +99,7 @@ updateState action model =
       )
 
     FromServer (newModel) ->
-      ( newModel
+      ( { model | votes <- newModel }
       , Effects.none
       )
 
