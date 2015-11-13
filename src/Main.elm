@@ -51,8 +51,6 @@ port runEffects = app.tasks
 main : Signal Html
 main = app.html
 
--- Something here doesn't type-check. I hope I can figure this out after some
--- sleep ...
 type Vote = Upvote Int | Downvote Int
 type alias Id = String
 type alias Votes = Dict Id Vote
