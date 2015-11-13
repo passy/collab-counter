@@ -5,7 +5,6 @@ import Html exposing (..)
 import Dict exposing (Dict)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Html.Lazy exposing (lazy, lazy2, lazy3)
 import Json.Decode as JD exposing ((:=))
 import Json.Encode as JE
 import Signal exposing (Mailbox, Address, mailbox, message)
@@ -135,7 +134,14 @@ view : Address Action -> Model -> Html
 view actionAddress model =
   let augModel = augment model
       guiAddress = Signal.forwardTo actionAddress FromGui
-  in div [] [ button [ onClick guiAddress DownvoteEvent ] [ text "-" ]
-            , text (toString augModel.voteCount)
-            , button [ onClick guiAddress UpvoteEvent ] [text "+" ]
-            ]
+  in div [ class "row btn-group btn-group-justified" ]
+    [ div [ class "col-xs-4" ]
+      [ button [ onClick guiAddress DownvoteEvent
+               , class "btn btn-default btn-block" ]
+               [ span [ class "glyphicon glyphicon-arrow-down" ] [] ] ]
+    , div [ class "col-xs-4 text-center" ] [ text (toString augModel.voteCount) ]
+    , div [ class "col-xs-4" ]
+      [ button [ onClick guiAddress UpvoteEvent
+               , class "btn btn-default btn-block" ]
+               [ span [ class "glyphicon glyphicon-arrow-up" ] [] ] ]
+    ]
